@@ -217,7 +217,7 @@ const condition = {
 };
 
 const jsonConditionParser = new JsonConditionParser();
-console.log(jsonConditionParser.evaluate(condition, data));
+// console.log(jsonConditionParser.evaluate(condition, data));
 
 // const data = {
 //     config: {
