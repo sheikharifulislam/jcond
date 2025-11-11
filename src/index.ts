@@ -200,24 +200,24 @@ const data = {
     device: "mobile",
 };
 
-const condition = {
-    logic: "and",
-    conditions: [
-        {
-            field: "{{config.base.media.{{device}}.style.color}}",
-            operator: "!==",
-            value: "red",
-        },
-        {
-            field: "{{config.base.media.mobile.style.fontSize}}",
-            operator: "!==",
-            value: "22px",
-        },
-    ],
-};
+// const condition = {
+//     logic: "and",
+//     conditions: [
+//         {
+//             field: "{{config.base.media.{{device}}.style.color}}",
+//             operator: "!==",
+//             value: "red",
+//         },
+//         {
+//             field: "{{config.base.media.mobile.style.fontSize}}",
+//             operator: "!==",
+//             value: "22px",
+//         },
+//     ],
+// };
 
-const jsonConditionParser = new JsonConditionParser();
-console.log(jsonConditionParser.evaluate(condition, data));
+// const jsonConditionParser = new JsonConditionParser();
+// console.log(jsonConditionParser.evaluate(condition, data));
 
 // const data = {
 //     config: {
