@@ -6,20 +6,30 @@ export default defineConfig({
             format: "esm",
             syntax: "es2020",
             dts: true,
+            bundle: true,
             output: {
                 minify: true,
                 sourceMap: true,
                 target: "web",
+            },
+            autoExternal: {
+                dependencies: false,
+                peerDependencies: true,
             },
         },
         {
             format: "cjs",
             syntax: "es2020",
             dts: true,
+            bundle: true,
             output: {
                 minify: true,
                 sourceMap: true,
                 target: "node",
+            },
+            autoExternal: {
+                dependencies: false,
+                peerDependencies: true,
             },
         },
     ],
