@@ -9,7 +9,6 @@ export default defineConfig({
             bundle: true,
             output: {
                 minify: true,
-                sourceMap: true,
                 target: "web",
             },
             autoExternal: {
@@ -24,7 +23,6 @@ export default defineConfig({
             bundle: true,
             output: {
                 minify: true,
-                sourceMap: true,
                 target: "node",
             },
             autoExternal: {
