@@ -1,21 +1,23 @@
 {
-    "name": "jondition",
+    "name": "jcond",
     "version": "1.0.0",
     "description": "A condition logic engine for JavaScript/TypeScript",
-    "main": "./dist/index.js",
+    "main": "./dist/index.mjs",
+    "module": "./dist/index.mjs",
     "types": "./dist/index.d.ts",
     "exports": {
         ".": {
-            "import": "./dist/index.js",
-            "types": "./dist/index.d.ts"
+            "types": "./dist/index.d.ts",
+            "import": "./dist/index.mjs",
+            "require": "./dist/index.cjs"
         }
     },
     "files": [
         "dist"
     ],
     "scripts": {
-        "dev": "nodemon --exec ts-node src/index.ts",
-        "build": "node ./esbuild.config.js",
+        "build": "rslib build",
+        "dev": "rslib build --watch",
         "clean": "rm -rf node_modules dist"
     },
     "keywords": [
@@ -29,14 +31,15 @@
     "license": "MIT",
     "repository": {
         "type": "git",
-        "url": "https://github.com/sheikharifulislam/jondition.git"
+        "url": "https://github.com/sheikharifulislam/jcond.git"
     },
     "bugs": {
-        "url": "https://github.com/sheikharifulislam/jondition/issues"
+        "url": "https://github.com/sheikharifulislam/jcond/issues"
     },
-    "homepage": "https://github.com/sheikharifulislam/jondition#readme",
+    "homepage": "https://github.com/sheikharifulislam/jcond#readme",
     "packageManager": "pnpm@10.6.2",
     "devDependencies": {
+        "@rslib/core": "^0.17.1",
         "@types/node": "^24.2.0",
         "esbuild": "^0.25.8",
         "nodemon": "^3.1.10",
