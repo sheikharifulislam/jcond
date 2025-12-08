@@ -112,7 +112,7 @@ class JsonConditionParser {
             },
             containsAll: (leftExpression, rightExpression) => {
                 // check both are array
-                if (!Array.isArray(leftExpression) && !Array.isArray(rightExpression)) return false;
+                if (!Array.isArray(leftExpression) || !Array.isArray(rightExpression)) return false;
 
                 // check leftExpression is empty and rightExpression is not empty
                 if (!leftExpression.length && rightExpression.length) return false;
@@ -120,7 +120,7 @@ class JsonConditionParser {
                 return rightExpression.every((item: Item) => leftExpression.includes(item));
             },
             containsAny: (leftExpression, rightExpression) => {
-                if (!Array.isArray(leftExpression) && !Array.isArray(rightExpression)) return false;
+                if (!Array.isArray(leftExpression) || !Array.isArray(rightExpression)) return false;
 
                 // check leftExpression is empty and rightExpression is not empty
                 if (!leftExpression.length && rightExpression.length) return false;
