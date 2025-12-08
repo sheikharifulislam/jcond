@@ -57,10 +57,13 @@ type OperatorMap = {
     isTruthy: OperatorFunction;
     isFalsy: OperatorFunction;
     contains: OperatorFunction;
+    containsAll: OperatorFunction;
+    containsAny: OperatorFunction;
 };
 
 type Logic = "and" | "or";
 type Operator = "===" | "!==" | "<" | ">" | "<=" | ">=" | "isTruthy" | "isFalsy" | "contains";
+type Item = string | number | boolean;
 
 interface Condition {
     field: string | number | boolean | Array<any> | Object;
@@ -100,27 +103,29 @@ class JsonConditionParser {
                 return false;
             },
             contains: (leftExpression, rightExpression) => {
-                // check if the leftExpression and rightExpression is array.
-                if (Array.isArray(leftExpression) && Array.isArray(rightExpression)) {
-                    return rightExpression.some((item) => leftExpression.includes(item));
-                }
-                // check leftExpression is array and rightExpression is not array and leftExpression array contain rightExpression
-                if (Array.isArray(leftExpression) && !Array.isArray(rightExpression)) {
-                    return leftExpression.includes(rightExpression);
-                }
-
-                // leftExpression is not array and rightExpression is array -  check if any element of rightExpression is contained in string leftExpression
-                if (!Array.isArray(leftExpression) && Array.isArray(rightExpression)) {
-                    return rightExpression.some((item) => String(leftExpression).includes(item));
-                }
-
-                // check leftExpression and rightExpression is string - check leftExpression include rightExpression
-                if (typeof leftExpression === "string" && typeof rightExpression === "string") {
+                if (Array.isArray(leftExpression) || typeof leftExpression === "string") {
                     return leftExpression.includes(rightExpression);
                 }
 
                 //fallback
                 return false;
+            },
+            containsAll: (leftExpression, rightExpression) => {
+                // check both are array
+                if (!Array.isArray(leftExpression) && !Array.isArray(rightExpression)) return false;
+
+                // check leftExpression is empty and rightExpression is not empty
+                if (!leftExpression.length && rightExpression.length) return false;
+
+                return rightExpression.every((item: Item) => leftExpression.includes(item));
+            },
+            containsAny: (leftExpression, rightExpression) => {
+                if (!Array.isArray(leftExpression) && !Array.isArray(rightExpression)) return false;
+
+                // check leftExpression is empty and rightExpression is not empty
+                if (!leftExpression.length && rightExpression.length) return false;
+
+                return rightExpression.some((item: Item) => leftExpression.includes(item));
             },
         };
     }
@@ -130,7 +135,6 @@ class JsonConditionParser {
         }
 
         if (conditionConfig.field && conditionConfig.operator && conditionConfig.field) {
-            // const { field, operator, value } = conditionConfig;
             return this.evaluateCondition(conditionConfig, data);
         }
 
@@ -140,7 +144,7 @@ class JsonConditionParser {
         }
     }
 
-    evaluateBooleanExpression(condition: Condition, data: any) {
+    private evaluateBooleanExpression(condition: Condition, data: any) {
         const { field: leftExpression, operator } = condition;
         const leftExpressionValue =
             typeof leftExpression === "string" && isVariable(leftExpression)
@@ -150,7 +154,7 @@ class JsonConditionParser {
         return this.operators[operator](leftExpressionValue);
     }
 
-    evaluateCondition(condition: Condition, data: any) {
+    private evaluateCondition(condition: Condition, data: any) {
         const { field: leftExpression, operator, value: rightExpression } = condition;
 
         if (!this.operators[operator]) {
@@ -167,7 +171,7 @@ class JsonConditionParser {
                 : rightExpression;
         return this.operators[operator](leftExpressionValue, rightExpressionValue);
     }
-    evaluateConditions(conditions: any, logic: Logic, data: any) {
+    private evaluateConditions(conditions: any, logic: Logic, data: any) {
         if (!Array.isArray(conditions) || conditions.length < 1) {
             return true;
         }
